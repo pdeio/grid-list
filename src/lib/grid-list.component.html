@@ -1,0 +1,267 @@
+<div class="row mb-4 list-header">
+  <div class="col-6">
+    <div *ngIf="hasList">
+      <button
+        class="btn btn-sm rounded-pill btn-outline-light btn-svg mr-2 {{
+          isList ? '' : 'active'
+        }}"
+        (click)="isList = false"
+      >
+        <svg
+          xml:space="preserve"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          id="grid"
+          style="enable-background: new 0 0 369.946 369.946"
+          version="1.1"
+          viewBox="0 0 369.946 369.946"
+          width="16px"
+          x="0px"
+          xmlns="http://www.w3.org/2000/svg"
+          y="0px"
+        >
+          <path
+            d="M250.609,0h-11.934H131.271h-11.934H0v119.337v11.934v107.404v11.934v119.337h119.337h11.934
+        h107.404h11.934h119.337V250.609v-11.934V131.271v-11.934V0H250.609z M238.675,11.934v107.404H131.271V11.934H238.675z
+         M238.675,131.271v107.404H131.271V131.271H238.675z M11.934,11.934h107.404v107.404H11.934V11.934z M11.934,131.271h107.404
+        v107.404H11.934V131.271z M11.934,358.012V250.609h107.404v107.404H11.934z M131.271,358.012V250.609h107.404v107.404H131.271z
+         M358.012,358.012H250.609V250.609h107.404V358.012z M358.012,238.675H250.609V131.271h107.404V238.675z M250.609,119.337V11.934
+        h107.404v107.404H250.609z"
+          ></path>
+        </svg>
+      </button>
+      <button
+        class="btn btn-sm btn-rounded rounded-pill btn-outline-light btn-svg {{
+          isList ? 'active' : ''
+        }}"
+        (click)="isList = true"
+      >
+        <svg
+          xml:space="preserve"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          height="16px"
+          id="list"
+          style="enable-background: new 0 0 612 612"
+          version="1.1"
+          viewBox="0 0 612 612"
+          width="16px"
+          x="0px"
+          xmlns="http://www.w3.org/2000/svg"
+          y="0px"
+        >
+          <path
+            d="M0,97.92v24.48h612V97.92H0z M0,318.24h612v-24.48H0V318.24z M0,514.08h612V489.6H0V514.08z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="col-6 text-right">
+    <span *ngIf="addBtn" [routerLink]="addBtn.url" [class]="addBtn.icon"></span>
+  </div>
+</div>
+<div class="row {{loading ? 'ghost' : ''}}" *ngIf="data;">
+  <div
+    class="list-item {{
+      isList ? 'list-horizontal col-12' : 'col-xl-3 col-sm-6 col-xs-12'
+    }}"
+    style="min-width: 245px"
+    *ngFor="let item of data; let i = index"
+  >
+    <div
+      class="card o-hidden mb-4 d-flex {{
+        isList ? 'flex-row' : 'flex-column'
+      }}"
+    >
+      <div class="list-thumb d-flex">
+        <div *ngIf="thumbType === 'audio'">
+          <div class="audioPlayer">
+            <img alt="" [src]="item.thumbUrl" />
+            <div class="timeline">
+              <div
+                class="soundline"
+                [style]="
+                  'width:' + (audios[i] ? audiosProgress[i] : '0') + '%;'
+                "
+              ></div>
+              <div class="controllers text-center d-flex">
+                <div class="back" (click)="reloadAudio(i)"></div>
+                <div
+                  *ngIf="!audios[i] || audios[i].ended || audios[i].paused"
+                  class="play"
+                  (click)="playAudio(item.thumbUrl, i)"
+                ></div>
+                <div
+                  *ngIf="audios[i] && !audios[i].paused && !audios[i].ended"
+                  class="pause"
+                  (click)="pauseAudio(i)"
+                ></div>
+
+                <div
+                  *ngIf="!audios[i] || !audios[i].muted"
+                  (click)="audios[i].muted = true"
+                  class="volume"
+                ></div>
+                <div
+                  *ngIf="audios[i] && audios[i].muted"
+                  (click)="audios[i].muted = false"
+                  class="mute"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <img *ngIf="thumbType === 'image'" alt="" [src]="item.thumbUrl" />
+
+        <div
+          *ngIf="
+            !isList && (item.actionBtn || item.actionBtn2 || item.actionBtn3)
+          "
+          class="thumb-overlay p-1 w-100 text-center"
+        >
+          <a
+            *ngIf="item.actionBtn"
+            [title]="item.actionBtn.tooltip"
+            (click)="onActionBtnClick(item)"
+            [routerLink]="item.actionBtn.url ? item.actionBtn.url : []"
+            ><span class="{{ item.actionBtn.icon }}"></span
+          ></a>
+          <a
+            *ngIf="item.actionBtn2"
+            [title]="item.actionBtn2.tooltip"
+            (click)="onActionBtn2Click(item)"
+            [routerLink]="item.actionBtn2.url ? item.actionBtn2.url : []"
+            ><span class="{{ item.actionBtn2.icon }}"></span
+          ></a>
+          <a
+            *ngIf="item.actionBtn3"
+            [title]="item.actionBtn3.tooltip"
+            (click)="onActionBtn3Click(item)"
+            [routerLink]="item.actionBtn3.url ? item.actionBtn3.url : []"
+            ><span class="{{ item.actionBtn3.icon }}"></span
+          ></a>
+          <a
+            *ngIf="item.actionBtn4"
+            [title]="item.actionBtn4.tooltip"
+            (click)="onActionBtn4Click(item)"
+            [routerLink]="item.actionBtn4.url ? item.actionBtn4.url : []"
+            ><span class="{{ item.actionBtn4.icon }}"></span
+          ></a>
+        </div>
+      </div>
+      <div
+        class="{{ data.length == 1 ? 'mt-3' : '' }} flex-grow-1 {{
+          isList ? 'pl-2 d-flex' : 'd-block'
+        }}"
+      >
+        <div
+          class="card-body align-self-center flex-column justify-content-between align-items-lg-center {{
+            isList ? 'd-flex flex-lg-row' : 'd-block'
+          }}"
+        >
+          <a *ngIf="item.title" class="w-40 w-sm-100"
+            ><div class="text-truncate item-title">
+              {{ item.title }}
+            </div></a
+          >
+          <p
+            *ngIf="item.description"
+            title="{{ item.description }}"
+            class="m-0 text-truncate text-muted text-small w-15 w-sm-100"
+          >
+            {{ item.description }}
+          </p>
+          <p
+            *ngIf="item.description2"
+            title="{{ item.description }}"
+            class="m-0 text-truncatetext-muted text-small w-15 w-sm-100"
+          >
+            {{ item.description2 }}
+          </p>
+          <p
+            *ngIf="item.description3"
+            title="{{ item.description }}"
+            class="m-0 text-truncate text-muted text-small w-15 w-sm-100"
+          >
+            {{ item.description3 }}
+          </p>
+          <p
+            *ngIf="item.badgeLabel"
+            [style.position]="isList ? 'inherit' : 'absolute'"
+            class="m-0 text-truncate text-muted text-small w-15 w-sm-100 d-none d-lg-block {{
+              item.badgeLabel.position
+            }}"
+          >
+            <span class="badge badge-{{ item.badgeLabel.color }} ">
+              {{ item.badgeLabel.label }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-3 text-center" *ngIf="pagination">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center pagination-lg">
+        <li class="page-item  {{!pagination.previousPage ? 'disabled': '' }}">
+          <a class=" pagination-previous" (click)="onChangePage(pagination.previousPage)" aria-label="Previous">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xml:space="preserve"
+              width="16px"
+              height="23px"
+              version="1.1"
+              style="
+                shape-rendering: geometricPrecision;
+                text-rendering: geometricPrecision;
+                image-rendering: optimizeQuality;
+                fill-rule: evenodd;
+                clip-rule: evenodd;
+              "
+              viewBox="0 0 16 22.63"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+            >
+              <path
+                d="M2.45 10.56l8.59 -8.58c0.41,-0.42 1.08,-0.42 1.5,0l1 1c0.41,0.41 0.41,1.08 0,1.5l-6.81 6.83 6.81 6.84c0.41,0.42 0.41,1.09 0,1.5l-1 1c-0.42,0.42 -1.09,0.42 -1.5,0l-8.59 -8.59c-0.42,-0.41 -0.42,-1.08 0,-1.5l0 0z"
+              />
+            </svg>
+          </a>
+        </li>
+        <li *ngIf="pagination.previousPage" class="page-item" (click)="onChangePage(pagination.previousPage)"><a >{{pagination.previousPage}}</a></li>
+        <li class="page-item current"><a >{{pagination.currentPage}}</a></li>
+        <li  *ngIf="pagination.nextPage"><a (click)="onChangePage(pagination.nextPage)">{{pagination.nextPage}}</a></li>
+        <li class="page-item {{!pagination.nextPage ? 'disabled': '' }}">
+          <a class="pagination-next" (click)="onChangePage(pagination.nextPage)" aria-label="Next">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xml:space="preserve"
+              width="16px"
+              height="23px"
+              version="1.1"
+              style="
+                shape-rendering: geometricPrecision;
+                text-rendering: geometricPrecision;
+                image-rendering: optimizeQuality;
+                fill-rule: evenodd;
+                clip-rule: evenodd;
+              "
+              viewBox="0 0 16 22.63"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              focusable="false"
+              role="img"
+            >
+              <path
+                d="M13.54 12.06l-8.59 8.59c-0.41,0.42 -1.08,0.42 -1.5,0l-1 -1c-0.41,-0.41 -0.42,-1.08 0,-1.5l6.8 -6.84 -6.8 -6.83c-0.42,-0.42 -0.41,-1.09 0,-1.5l1 -1c0.42,-0.42 1.09,-0.42 1.5,0l8.59 8.58c0.41,0.42 0.41,1.09 0,1.5z"
+              />
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
