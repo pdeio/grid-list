@@ -4,4 +4,10 @@ This library was generated with [Angular CLI](https://github.com/angular/angular
 
 ## install
 
-run npm i pdeio-grid-list
+run: npm i pdeio-grid-list
+
+
+## require
+
+required bootstrap 4.5: npm i -s bootstrap
+
