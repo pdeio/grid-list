@@ -1,4 +1,4 @@
-<div class="row mb-4 list-header">
+<div class="row mx-0 mb-4 list-header">
   <div class="col-6">
     <div *ngIf="hasList">
       <button
@@ -59,7 +59,7 @@
     <span *ngIf="addBtn" [routerLink]="addBtn.url" [class]="addBtn.icon"></span>
   </div>
 </div>
-<div class="row {{loading ? 'ghost' : ''}}" *ngIf="data;">
+<div class="row mx-0 {{loading ? 'ghost' : ''}}" *ngIf="data;">
   <div
     class="list-item {{
       isList ? 'list-horizontal col-12' : 'col-xl-3 col-sm-6 col-xs-12'
