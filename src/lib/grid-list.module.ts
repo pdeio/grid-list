@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { GridListComponent } from './grid-list.component';
 
 
@@ -7,7 +8,8 @@ import { GridListComponent } from './grid-list.component';
 @NgModule({
   declarations: [GridListComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   exports: [GridListComponent]
 })
